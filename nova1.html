@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova AI OS - The AI Operating System by Teched Studios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000000;
+            --main-teal: #00ffff;
+            --main-purple: #8e44ad;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.75);
+            --card-glass: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --header-glass: rgba(0, 0, 0, 0.85);
+            --button-glow: rgba(0, 255, 255, 0.35);
+            --particle-color: #00ffff;
+        }
+
+        /* Essential resets */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* Single-file layout container */
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+            scroll-behavior: smooth;
+        }
+
+        /* Three.js canvas container */
+        #three-canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1; /* Background layer */
+            pointer-events: none; /* Let clicks pass through to content */
+        }
+
+        /* Full-width, clean Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: var(--header-glass);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--main-teal);
+        }
+
+        /* Base Section styling */
+        section {
+            width: 100%;
+            min-height: 100vh; /* Viewport height for single-file effect */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 5% 50px;
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+        }
+
+        p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 1. Hero Section */
+        #hero {
+            padding-top: 150px; /* Offset for header */
+            position: relative;
+            overflow: hidden;
+        }
+
+        #hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 30%, var(--main-purple) 80%, var(--main-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #hero p {
+            font-size: 1.15rem;
+            margin-bottom: 3.5rem;
+        }
+
+        /* 3D Sphere Placeholder/Overlay */
+        #hero-sphere-visual {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            /* This div is just for visual structure; the actual Three.js sphere sits behind it in its canvas */
+        }
+
+        /* CTA Buttons */
+        .cta-container {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 1rem 2rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Primary Button */
+        .cta-btn.primary {
+            background-color: var(--main-teal);
+            color: var(--bg);
+            border: 1px solid var(--main-teal);
+            box-shadow: 0 0 15px var(--button-glow);
+        }
+
+        .cta-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px var(--main-teal), 0 0 5px var(--main-teal) inset;
+        }
+
+        /* Secondary Button */
+        .cta-btn.secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(5px);
+        }
+
+        .cta-btn.secondary:hover {
+            border-color: var(--main-teal);
+            box-shadow: 0 0 10px var(--button-glow);
+            color: var(--main-teal);
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        /* 2. Ecosystem Section */
+        #ecosystem h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 1rem;
+        }
+
+        /* Glassmorphic Cards */
+        .ecosystem-card {
+            background-color: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: left;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ecosystem-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.08) 0%, rgba(142, 68, 173, 0.03) 50%, rgba(0, 0, 0, 0) 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .ecosystem-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: var(--main-teal);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.1), 0 0 10px rgba(0, 255, 255, 0.1) inset;
+        }
+
+        .ecosystem-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        /* Unified Card Title */
+        .ecosystem-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        /* Unified reduced text size for body copy */
+        .ecosystem-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin: 0;
+            max-width: none;
+            line-height: 1.6;
+        }
+
+        /* Color Tiers */
+        .card-lite .card-icon { color: var(--text-primary); }
+        .card-pro .card-icon { color: var(--main-purple); }
+        .card-coder .card-icon { color: var(--main-teal); }
+
+        /* Icon styling */
+        .card-pro h3 {
+            background: linear-gradient(135deg, var(--text-primary), var(--main-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-coder h3 {
+            background: linear-gradient(135deg, var(--text-primary), var(--main-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 3. Core Features Section */
+        #features {
+            background-color: #030303; /* Very dark background to contrast particles */
+        }
+
+        #features h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3.5rem;
+            font-weight: 700;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3x2 Grid */
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .feature-tile {
+            background-color: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: left;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .feature-tile:hover {
+            transform: translateY(-5px);
+            border-color: var(--main-teal);
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.08);
+            background-color: rgba(255, 255, 255, 0.07);
+        }
+
+        .feature-icon-small {
+            font-size: 1.5rem;
+            color: var(--main-teal);
+            width: 40px;
+            text-align: center;
+        }
+
+        .feature-tile h4 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        /* 4. About Section (Corrected) */
+        #about {
+            min-height: 80vh;
+            justify-content: center;
+        }
+
+        #about h2 {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        #about p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            text-align: center;
+        }
+
+        /* Corrected underlined email */
+        .email-link {
+            color: var(--main-teal);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--main-teal);
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .email-link:hover {
+            color: var(--text-primary);
+            border-color: var(--text-primary);
+        }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            padding: 2rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: auto;
+        }
+
+        /* Utility classes for icon placeholders (replace with FontAwesome if needed) */
+        .icon-placeholder {
+            display: inline-block;
+            font-style: normal;
+        }
+
+        /* Mobile First Responsiveness */
+        @media (max-width: 968px) {
+            #hero h1 { font-size: 2.8rem; }
+            #ecosystem h2, #features h2 { font-size: 2.2rem; }
+            .ecosystem-grid, .features-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .feature-tile { padding: 1.5rem; }
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 0 3%; height: 60px; }
+            nav ul { display: none; } /* Basic mobile menu hiding */
+            #hero h1 { font-size: 2.2rem; }
+            .cta-container { gap: 1rem; }
+            .cta-btn { padding: 0.8rem 1.5rem; font-size: 0.85rem; }
+            .ecosystem-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="three-canvas-container"></div>
+
+    <div class="page-container">
+
+        <header>
+            <div class="logo">NOVA AI OS</div>
+            <nav>
+                <ul>
+                    <li><a href="#ecosystem">Products</a></li>
+                    <li><a href="#hero">API</a></li>
+                    <li><a href="#hero">Documentation</a></li>
+                    <li><a href="#about">Teched Studios</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section id="hero">
+            <div id="hero-sphere-visual"></div> <h1>“Nova — The AI Operating System”</h1>
+            <p>Nova combines Model Power and Interface Intelligence to control chat, coding, research, creativity, and workflows.</p>
+            <div class="cta-container">
+                <a href="#ecosystem" class="cta-btn primary">Launch Nova Lite</a>
+                <a href="#hero" class="cta-btn secondary">Explore Nova Pro</a>
+                <a href="#hero" class="cta-btn secondary">
+                    <span class="icon-placeholder">&lt;/&gt;</span> Nova Developer API
+                </a>
+            </div>
+        </section>
+
+        <section id="ecosystem">
+            <h2>Product <span style="color: var(--main-purple);">Ecosystem</span></h2>
+            <div class="ecosystem-grid">
+                <div class="ecosystem-card card-lite">
+                    <span class="card-icon icon-placeholder">⚡</span>
+                    <h3>Nova Lite</h3>
+                    <p>Lightweight AI assistant.<br>Fast chat and research.<br>Productivity AI.</p>
+                </div>
+                <div class="ecosystem-card card-pro">
+                    <span class="card-icon icon-placeholder">🧠</span>
+                    <h3>Nova Pro</h3>
+                    <p>Advanced reasoning system.<br>Autonomous AI workflows.<br>Multi-tool AI intelligence.</p>
+                </div>
+                <div class="ecosystem-card card-coder">
+                    <span class="card-icon icon-placeholder">&lt;/&gt;🔨</span>
+                    <h3>Nova Coder</h3>
+                    <p>AI developer system.<br>generates applications and<br>complex software.<br>Can build full projects.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2>Core Features</h2>
+            <div class="features-grid">
+                <div class="feature-tile">
+                    <span class="feature-icon-small icon-placeholder">💬</span>
+                    <h4>AI Chat Engine</h4>
+                </div>
+                <div class="feature-tile">
+                    <span class="feature-icon-small icon-placeholder">&gt;_</span>
+                    <h4>Code Generation</h4>
+                </div>
+                <div class="feature-tile">
+                    <span class="feature-icon-small icon-placeholder">🔍</span>
+                    <h4>Research Intelligence</h4>
+                </div>
+                <div class="feature-tile">
+                    <span class="feature-icon-small icon-placeholder">🪄🖼️</span>
+                    <h4>Media & Image AI</h4>
+                </div>
+                <div class="feature-tile">
+                    <span class="feature-icon-small icon-placeholder">🧠☁️</span>
+                    <h4>Memory System</h4>
+                </div>
+                <div class="feature-tile">
+                    <span class="feature-icon-small icon-placeholder">⚙️🔗</span>
+                    <h4>Workflow Automation</h4>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2>About <span style="color: var(--main-teal);">Teched Studios</span></h2>
+            <p>Nova AI OS is built by Teched Studios, an independent innovation studio focused on creating next-generation AI systems and platforms.</p>
+            <a href="mailto:techedstudios.contact@gmail.com" class="email-link">techedstudios.contact@gmail.com</a>
+        </section>
+
+        <footer>
+            <p>© Teched Studios. All rights reserved. | Terms of Service | Privacy Policy</p>
+        </footer>
+
+    </div> <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // Use an immediately invoked function to avoid global scope pollution
+        (function() {
+            // Scene Setup
+            const container = document.getElementById('three-canvas-container');
+            const scene = new THREE.Scene();
+            
+            // Background is defined by CSS gradient, so canvas must be transparent
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Lighting (for glass effect if added later)
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 10, 7.5);
+            scene.add(directionalLight);
+
+            // 1. NEURAL SPHERE VISUAL (Center object)
+            // Geometry: A detailed sphere
+            const sphereGeometry = new THREE.IcosahedronGeometry(2, 10); // Radius 2, detail 10
+            
+            // Material: Glowing Cyan/Teal Points
+            const sphereMaterial = new THREE.PointsMaterial({
+                color: 0x00ffff, // Cyan/Teal
+                size: 0.012,
+                transparent: true,
+                opacity: 0.8,
+                sizeAttenuation: true // Makes points smaller with distance
+            });
+            
+            const neuralSphere = new THREE.Points(sphereGeometry, sphereMaterial);
+            scene.add(neuralSphere);
+
+            // Secondary, larger sphere for depth/glow
+            const outerSphereGeometry = new THREE.IcosahedronGeometry(2.3, 5);
+            const outerSphereMaterial = new THREE.PointsMaterial({
+                color: 0x8e44ad, // Purple
+                size: 0.008,
+                transparent: true,
+                opacity: 0.3,
+                sizeAttenuation: true
+            });
+            const outerSphere = new THREE.Points(outerSphereGeometry, outerSphereMaterial);
+            scene.add(outerSphere);
+
+            // Inner solid sphere for glow core
+            const coreGeometry = new THREE.IcosahedronGeometry(1.5, 2);
+            const coreMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00ffff,
+                transparent: true,
+                opacity: 0.05
+            });
+            const coreSphere = new THREE.Mesh(coreGeometry, coreMaterial);
+            scene.add(coreSphere);
+
+            // 2. BACKGROUND FLOATING PARTICLES
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1000;
+            const posArray = new Float32Array(particlesCount * 3); // [x,y,z, x,y,z, ...]
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                // Spread particles across a wide box
+                posArray[i] = (Math.random() - 0.5) * 20; // x and y (-10 to 10)
+                if (i % 3 === 2) posArray[i] = (Math.random() - 0.5) * 10; // z (-5 to 5)
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.005,
+                color: 0x00ffff, // Main Cyan Teal
+                transparent: true,
+                opacity: 0.3,
+                blending: THREE.AdditiveBlending // Makes overlapping particles brighter
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            // Position Camera
+            camera.position.z = 6;
+
+            // ANIMATION LOOP
+            const clock = new THREE.Clock();
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                const elapsedTime = clock.getElapsedTime();
+
+                // Rotate Neural Sphere
+                neuralSphere.rotation.y = elapsedTime * 0.15;
+                neuralSphere.rotation.x = Math.sin(elapsedTime * 0.1) * 0.1;
+                outerSphere.rotation.y = -elapsedTime * 0.1;
+
+                // Move core subtly
+                coreSphere.position.x = Math.sin(elapsedTime * 0.5) * 0.05;
+                coreSphere.position.y = Math.cos(elapsedTime * 0.3) * 0.05;
+
+                // Move Particles
+                particlesMesh.rotation.y = -elapsedTime * 0.02;
+                // Add some subtle vertical drift
+                const positions = particlesMesh.geometry.attributes.position.array;
+                for (let i = 1; i < positions.length; i += 3) {
+                    positions[i] += Math.sin(elapsedTime * 0.1 + positions[i-1]) * 0.0005;
+                }
+                particlesMesh.geometry.attributes.position.needsUpdate = true;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // RESIZE HANDLING
+            window.addEventListener('resize', onWindowResize, false);
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            // MOUSE INTERACTION (Parallax)
+            let mouseX = 0;
+            let mouseY = 0;
+            const targetX = 0;
+            const targetY = 0;
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX) / windowHalfX;
+                mouseY = (event.clientY - windowHalfY) / windowHalfY;
+            });
+
+            // Smooth parallax logic within the animate loop
+            function smoothParallax() {
+                // Map mouse coordinates to subtle rotation/position changes
+                const targetCameraX = mouseX * 0.5;
+                const targetCameraY = -mouseY * 0.3;
+                
+                // Linear interpolation (Lerp) for smoothing
+                camera.position.x += (targetCameraX - camera.position.x) * 0.05;
+                camera.position.y += (targetCameraY - camera.position.y) * 0.05;
+                camera.lookAt(scene.position); // Always look at the center sphere
+            }
+            
+            // Add parallax to the loop
+            function wrappedAnimate() {
+                requestAnimationFrame(wrappedAnimate);
+                const elapsedTime = clock.getElapsedTime();
+                
+                neuralSphere.rotation.y = elapsedTime * 0.15;
+                neuralSphere.rotation.x = Math.sin(elapsedTime * 0.1) * 0.1;
+                outerSphere.rotation.y = -elapsedTime * 0.1;
+                
+                coreSphere.position.x = Math.sin(elapsedTime * 0.5) * 0.05;
+                coreSphere.position.y = Math.cos(elapsedTime * 0.3) * 0.05;
+                
+                particlesMesh.rotation.y = -elapsedTime * 0.02;
+                particlesMesh.geometry.attributes.position.needsUpdate = true;
+                
+                smoothParallax(); // Apply the mouse interaction
+
+                renderer.render(scene, camera);
+            }
+            // Replace the basic animate loop with the one containing parallax
+            wrappedAnimate();
+
+        })();
+    </script>
+</body>
+</html>

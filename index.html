@@ -1,0 +1,2239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova AI - The AI Operating System by Teched Studios</title>
+    <meta name="description"
+        content="Nova AI OS is the next-generation Artificial Intelligence Operating System by Teched Studios. Explore the power of Nova AI, combining model power and interface intelligence.">
+    <meta name="keywords"
+        content="Nova, AI, Nova AI, Artificial Intelligence, Teched Studios, AI Operating System, Nova OS">
+    <meta name="author" content="Teched Studios">
+    <meta property="og:title" content="Nova AI - The AI Operating System">
+    <meta property="og:description"
+        content="Nova AI OS is the next-generation Artificial Intelligence Operating System by Teched Studios.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000005;
+            --hud-blue: #00d4ff;
+            --hud-cyan: #00ffff;
+            --main-teal: #00ffff;
+            --main-purple: #8e44ad;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.75);
+            --card-glass: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --header-glass: rgba(0, 0, 5, 0.88);
+            --button-glow: rgba(0, 255, 255, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+        }
+
+        /* ── INTRO ── */
+        #intro-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: radial-gradient(circle at 50% 50%, #051428 0%, #000005 60%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #intro-canvas-container {
+            position: absolute;
+            inset: 0;
+        }
+
+        /* HUD corners */
+        .hud-corner {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-color: rgba(0, 212, 255, 0.4);
+            border-style: solid;
+            border-width: 0;
+        }
+
+        .hud-corner.tl {
+            top: 28px;
+            left: 28px;
+            border-top-width: 1.5px;
+            border-left-width: 1.5px
+        }
+
+        .hud-corner.tr {
+            top: 28px;
+            right: 28px;
+            border-top-width: 1.5px;
+            border-right-width: 1.5px
+        }
+
+        .hud-corner.bl {
+            bottom: 28px;
+            left: 28px;
+            border-bottom-width: 1.5px;
+            border-left-width: 1.5px
+        }
+
+        .hud-corner.br {
+            bottom: 28px;
+            right: 28px;
+            border-bottom-width: 1.5px;
+            border-right-width: 1.5px
+        }
+
+        /* HUD labels */
+        .hud-label {
+            position: absolute;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.52rem;
+            color: rgba(180, 220, 255, 0.6);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            line-height: 1.7;
+        }
+
+        .hud-label.tl {
+            top: 46px;
+            left: 90px
+        }
+
+        .hud-label.tr {
+            top: 46px;
+            right: 90px;
+            text-align: right
+        }
+
+        .hud-label.bl {
+            bottom: 46px;
+            left: 90px
+        }
+
+        .hud-label.br {
+            bottom: 46px;
+            right: 90px;
+            text-align: right
+        }
+
+        /* Nova wordmark */
+        #intro-title {
+            position: absolute;
+            bottom: 108px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0)
+            }
+        }
+
+        .nova-wordmark {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.4rem;
+            font-weight: 900;
+            letter-spacing: 0.5em;
+            color: #fff;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.5);
+        }
+
+        .nova-sub {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.5rem;
+            letter-spacing: 0.3em;
+            color: rgba(0, 212, 255, 0.7);
+            text-transform: uppercase;
+        }
+
+        /* Boot status */
+        #boot-status {
+            position: absolute;
+            bottom: 88px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.58rem;
+            color: rgba(180, 240, 255, 0.9);
+            letter-spacing: 0.22em;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        #boot-status span {
+            display: block;
+            overflow: hidden;
+            border-right: 1.5px solid rgba(0, 212, 255, 0.8);
+            width: 0;
+            animation: typing 3s steps(40, end) 0.6s forwards, blink 0.7s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent
+            }
+        }
+
+        /* Progress bar */
+        #boot-progress-wrap {
+            position: absolute;
+            bottom: 72px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: 1.5px;
+            background: rgba(0, 100, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        #boot-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0088cc, #00ffff);
+            box-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+            transition: width 0.1s linear;
+        }
+
+        /* Flash overlay */
+        #flash-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: #fff;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+        }
+
+        /* ── MAIN SITE ── */
+        #main-site {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            opacity: 0;
+            /* Initially pointer-events:none to allow intro clicks if needed, removed when visible */
+            pointer-events: none;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        #main-site.visible {
+            opacity: 1;
+            pointer-events: auto;
+            /* Required for links to work */
+        }
+
+        #three-canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            /* Let clicks pass through to content */
+        }
+
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+            /* Ensures content is above the canvas */
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: var(--header-glass);
+            backdrop-filter: blur(16px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .logo span {
+            color: var(--hud-cyan);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--main-teal);
+            text-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Sections */
+        section {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 120px 5% 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1,
+        h2,
+        h3 {
+            letter-spacing: -0.03em;
+        }
+
+        p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Hero */
+        #hero {
+            padding-top: 160px;
+            overflow: hidden;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1.1rem;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 100px;
+            background: rgba(0, 212, 255, 0.06);
+            font-size: 0.75rem;
+            color: var(--hud-cyan);
+            letter-spacing: 0.07em;
+            margin-bottom: 2rem;
+            font-family: 'Orbitron', monospace;
+            animation: pulse-border 2s ease infinite;
+        }
+
+        @keyframes pulse-border {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 212, 255, 0);
+                border-color: rgba(0, 212, 255, 0.3)
+            }
+
+            50% {
+                box-shadow: 0 0 14px 2px rgba(0, 212, 255, 0.12);
+                border-color: rgba(0, 212, 255, 0.6)
+            }
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--hud-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--hud-cyan);
+            animation: blink-dot 1.5s ease infinite;
+        }
+
+        @keyframes blink-dot {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.3
+            }
+        }
+
+        #hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.08;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #80e4ff 60%, var(--main-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #hero p {
+            font-size: 1.15rem;
+            margin-bottom: 3rem;
+            max-width: 650px;
+        }
+
+        .cta-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 0.9rem 2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .cta-btn:hover::before {
+            opacity: 1;
+        }
+
+        .cta-btn.primary {
+            background: linear-gradient(135deg, #00a8cc, #00ffff);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.6), 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .cta-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-btn.secondary:hover {
+            border-color: var(--main-teal);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+            background: rgba(0, 255, 255, 0.06);
+            transform: translateY(-3px);
+        }
+
+        .cta-btn.outline {
+            background: transparent;
+            color: var(--hud-cyan);
+            border: 1px solid rgba(0, 212, 255, 0.4);
+        }
+
+        .cta-btn.outline:hover {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: var(--hud-cyan);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Ecosystem */
+        #ecosystem h2 {
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            margin-bottom: 3.5rem;
+            font-weight: 700;
+        }
+
+        #ecosystem h2 span {
+            color: var(--hud-cyan);
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .ecosystem-card {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: left;
+            transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            backdrop-filter: blur(14px);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ecosystem-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: radial-gradient(circle at 30% 20%, rgba(0, 212, 255, 0.07), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+            /* CRITICAL: don't block clicks on child elements like Learn More */
+        }
+
+        .ecosystem-card:hover {
+            transform: translateY(-10px) scale(1.01);
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.12);
+        }
+
+        .ecosystem-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            margin-bottom: 1.5rem;
+            width: fit-content;
+        }
+
+        .card-lite .card-badge {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .card-pro .card-badge {
+            background: rgba(142, 68, 173, 0.2);
+            color: #c084fc;
+        }
+
+        .card-coder .card-badge {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--hud-cyan);
+        }
+
+        .card-icon {
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
+            display: block;
+        }
+
+        .ecosystem-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-pro h3 {
+            background: linear-gradient(135deg, #fff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-coder h3 {
+            background: linear-gradient(135deg, #fff, var(--hud-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ecosystem-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+            max-width: none;
+            line-height: 1.65;
+        }
+
+        .card-link {
+            margin-top: 1.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: color 0.3s, gap 0.3s;
+        }
+
+        .card-lite .card-link:hover {
+            color: #fff
+        }
+
+        .card-pro .card-link {
+            color: #c084fc
+        }
+
+        .card-pro .card-link:hover {
+            color: #e0aaff
+        }
+
+        .card-coder .card-link {
+            color: var(--hud-cyan)
+        }
+
+        .card-coder .card-link:hover {
+            color: #80efff
+        }
+
+        .card-link:hover {
+            gap: 0.7rem
+        }
+
+        /* Features */
+        #features {
+            background: linear-gradient(180deg, #000008, #000412);
+        }
+
+        #features h2 {
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            margin-bottom: 3.5rem;
+            font-weight: 700;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .feature-tile {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 1.8rem;
+            text-align: left;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .feature-tile:hover {
+            transform: translateY(-6px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .feature-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: background 0.35s;
+        }
+
+        .feature-tile:hover .feature-icon-wrap {
+            background: rgba(0, 212, 255, 0.18);
+        }
+
+        .feature-tile h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+        }
+
+        .feature-tile p {
+            font-size: 0.83rem;
+            margin: 0;
+            max-width: none;
+            line-height: 1.55;
+        }
+
+        /* API */
+        #api {
+            background: #000008;
+        }
+
+        #api h2 {
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            margin-bottom: 1.5rem;
+        }
+
+        #api>p {
+            margin-bottom: 3rem;
+        }
+
+        .api-code-block {
+            background: rgba(0, 10, 20, 0.8);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: left;
+            max-width: 700px;
+            width: 100%;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .api-code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.6), transparent);
+        }
+
+        .code-keyword {
+            color: #c084fc
+        }
+
+        .code-string {
+            color: #86efac
+        }
+
+        .code-comment {
+            color: rgba(255, 255, 255, 0.35)
+        }
+
+        .code-var {
+            color: #60a5fa
+        }
+
+        .code-fn {
+            color: var(--hud-cyan)
+        }
+
+        .api-dots {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .api-dot:nth-child(1) {
+            background: #ff5f57
+        }
+
+        .api-dot:nth-child(2) {
+            background: #ffbd2e
+        }
+
+        .api-dot:nth-child(3) {
+            background: #28c840
+        }
+
+        /* About */
+        #about {
+            min-height: 70vh;
+        }
+
+        #about h2 {
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        #about h2 span {
+            color: var(--hud-cyan);
+        }
+
+        #about p {
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            max-width: 680px;
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 3rem;
+            margin: 2.5rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--hud-cyan);
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.06em;
+            margin-top: 0.3rem;
+        }
+
+        .email-link {
+            color: var(--main-teal);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.4);
+            padding-bottom: 2px;
+            transition: all 0.3s;
+        }
+
+        .email-link:hover {
+            color: #fff;
+            border-color: #fff;
+            text-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
+        }
+
+        footer {
+            width: 100%;
+            padding: 2rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        footer span {
+            color: rgba(0, 212, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media(max-width:968px) {
+
+            .ecosystem-grid,
+            .features-grid {
+                grid-template-columns: 1fr
+            }
+
+            #hero h1 {
+                font-size: 2.6rem
+            }
+        }
+
+        @media(max-width:600px) {
+            header {
+                padding: 0 4%
+            }
+
+            nav ul {
+                display: none
+            }
+
+            #hero h1 {
+                font-size: 2rem
+            }
+
+            .cta-container {
+                flex-direction: column;
+                align-items: center
+            }
+
+            .hud-label {
+                display: none
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Click Animations */
+        .card-link {
+            position: relative;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .card-link.clicked {
+            animation: link-pop 0.3s ease-out;
+        }
+
+        .card-link.clicked::after {
+            transform: scale(3);
+            opacity: 0;
+            transition: 0s;
+        }
+
+        .card-link.animating::after {
+            transform: scale(0);
+            opacity: 1;
+        }
+
+        @keyframes link-pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.92);
+                color: var(--hud-cyan);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* ── DYNAMIC DETAILS OVERLAY ── */
+        #details-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 8, 0.85);
+            backdrop-filter: blur(25px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        #details-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .details-content {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 4rem;
+            max-width: 800px;
+            width: 90%;
+            transform: translateY(60px) scale(0.95);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 100px rgba(0, 212, 255, 0.15), inset 0 0 40px rgba(0, 212, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #details-overlay.active .details-content {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        /* Grid background pattern inside overlay */
+        .details-content::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.5;
+        }
+
+        .close-details {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .close-details:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+            transform: rotate(90deg);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .details-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            text-align: left;
+        }
+
+        .details-icon {
+            font-size: 4.5rem;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+        }
+
+        #detail-title {
+            font-size: 3.2rem;
+            margin: 0;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff, var(--hud-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .details-badge {
+            display: inline-flex;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--hud-cyan);
+            letter-spacing: 0.1em;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .details-desc {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .details-sub {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .details-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .detail-feature-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .detail-feature-item span {
+            color: var(--hud-cyan);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .detail-feature-item:hover {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.4);
+            transform: translateY(-3px) !important;
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.1);
+        }
+
+        /* ── ANIMATED DEMO OVERLAY ── */
+        #details-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 8, 0.92);
+            backdrop-filter: blur(30px) saturate(1.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        #details-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .demo-panel {
+            background: rgba(0, 8, 20, 0.9);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            width: 92%;
+            max-width: 900px;
+            max-height: 88vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 80px rgba(0, 212, 255, 0.15), 0 0 200px rgba(0, 100, 255, 0.08), inset 0 0 60px rgba(0, 212, 255, 0.04);
+            transform: scale(0.92) translateY(40px);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        #details-overlay.active .demo-panel {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        /* Scanline effect */
+        .demo-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 20;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 212, 255, 0.012) 2px, rgba(0, 212, 255, 0.012) 4px);
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.4rem 2rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+            position: sticky;
+            top: 0;
+            background: rgba(0, 8, 20, 0.98);
+            z-index: 10;
+        }
+
+        .demo-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .demo-header-icon {
+            font-size: 2.2rem;
+            filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.6));
+        }
+
+        .demo-title-wrap {}
+
+        .demo-tier {
+            font-size: 0.7rem;
+            font-family: 'Orbitron', monospace;
+            color: var(--hud-cyan);
+            letter-spacing: 0.15em;
+            margin-bottom: 0.2rem;
+        }
+
+        .demo-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 40%, var(--hud-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-details {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .close-details:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .demo-body {
+            padding: 2rem 2.5rem 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Typewriter description */
+        .demo-desc-wrap {
+            margin-bottom: 2.5rem;
+            min-height: 5rem;
+        }
+
+        .demo-desc {
+            font-size: 1.1rem;
+            color: rgba(180, 220, 255, 0.9);
+            line-height: 1.75;
+        }
+
+        .demo-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: var(--hud-cyan);
+            margin-left: 2px;
+            animation: blink-cur 0.7s step-end infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink-cur {
+            50% {
+                opacity: 0
+            }
+        }
+
+        /* Feature demo steps */
+        .demo-steps-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: rgba(0, 212, 255, 0.6);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .demo-steps-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .demo-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .demo-step {
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 14px;
+            padding: 1.2rem 1.4rem;
+            opacity: 0;
+            transform: translateX(-25px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .demo-step.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .demo-step.revealed:hover {
+            border-color: rgba(0, 212, 255, 0.35);
+            background: rgba(0, 212, 255, 0.05);
+            transform: translateX(4px);
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: rgba(0, 212, 255, 0.12);
+            border: 1px solid rgba(0, 212, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            color: var(--hud-cyan);
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .step-body {}
+
+        .step-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .step-icon {
+            font-size: 1.3rem;
+        }
+
+        .step-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .step-progress {
+            height: 2px;
+            background: rgba(0, 212, 255, 0.12);
+            border-radius: 2px;
+            margin-top: 0.7rem;
+            overflow: hidden;
+        }
+
+        .step-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--hud-cyan), #fff);
+            border-radius: 2px;
+            transition: width 1.2s ease;
+        }
+
+        /* Live terminal / demo log */
+        .demo-terminal {
+            background: #000;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.2rem 1.4rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: rgba(0, 255, 200, 0.85);
+            margin-bottom: 2rem;
+            min-height: 5rem;
+            position: relative;
+        }
+
+        .demo-terminal::before {
+            content: '● ● ●';
+            position: absolute;
+            top: 0.7rem;
+            right: 1rem;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 4px;
+        }
+
+        .terminal-line {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .terminal-line.visible {
+            opacity: 1;
+        }
+
+        .t-prompt {
+            color: rgba(0, 212, 255, 0.7);
+        }
+
+        .t-ok {
+            color: rgba(0, 255, 180, 0.9);
+        }
+
+        .t-dim {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Progress bar at bottom */
+        .demo-progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .demo-progress-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            color: rgba(0, 212, 255, 0.6);
+            letter-spacing: 0.12em;
+            white-space: nowrap;
+        }
+
+        .demo-progress-track {
+            flex: 1;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .demo-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--hud-cyan), #fff);
+            transition: width 0.4s linear;
+        }
+
+        .demo-progress-pct {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            color: var(--hud-cyan);
+            min-width: 3ch;
+            text-align: right;
+        }
+
+        .demo-cta {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .demo-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00a8cc, #00ffff);
+            color: #000;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+            cursor: pointer;
+            border: none;
+            opacity: 0;
+            transform: translateY(16px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .demo-cta-btn.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .demo-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.7);
+        }
+
+        @media(max-width:768px) {
+            .demo-panel {
+                max-height: 95vh;
+            }
+
+            .demo-body {
+                padding: 1.5rem 1.5rem 2rem;
+            }
+
+            .demo-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ANIMATED DEMO OVERLAY -->
+    <div id="details-overlay">
+        <div class="demo-panel" id="demo-panel">
+            <div class="demo-header">
+                <div class="demo-header-left">
+                    <div class="demo-header-icon" id="demo-icon"></div>
+                    <div class="demo-title-wrap">
+                        <div class="demo-tier" id="demo-tier"></div>
+                        <div class="demo-title" id="demo-title"></div>
+                    </div>
+                </div>
+                <button class="close-details" id="close-details-btn">✕</button>
+            </div>
+            <div class="demo-body">
+                <!-- Description typewriter -->
+                <div class="demo-desc-wrap">
+                    <p class="demo-desc" id="demo-desc"></p>
+                </div>
+                <!-- Progress bar -->
+                <div class="demo-progress-wrap">
+                    <span class="demo-progress-label">DEMO LOADING</span>
+                    <div class="demo-progress-track">
+                        <div class="demo-progress-fill" id="demo-progress"></div>
+                    </div>
+                    <span class="demo-progress-pct" id="demo-pct">0%</span>
+                </div>
+                <!-- Feature steps -->
+                <div class="demo-steps-title">CAPABILITY BREAKDOWN</div>
+                <div class="demo-steps" id="demo-steps"></div>
+                <!-- Live terminal -->
+                <div class="demo-terminal" id="demo-terminal"></div>
+                <!-- CTA -->
+                <div class="demo-cta">
+                    <button class="demo-cta-btn" id="demo-cta">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLASH OVERLAY -->
+    <div id="flash-overlay"></div>
+
+    <!-- INTRO SCREEN -->
+    <div id="intro-screen">
+        <div id="intro-canvas-container"></div>
+        <div class="hud-corner tl"></div>
+        <div class="hud-corner tr"></div>
+        <div class="hud-corner bl"></div>
+        <div class="hud-corner br"></div>
+        <div class="hud-label tl">SYS.INIT v4.2.1<br>NOVA.CORE.BOOT<br>STATUS: LOADING</div>
+        <div class="hud-label tr">TECHED STUDIOS<br>AI-OS FRAMEWORK<br>BUILD 2026.3</div>
+        <div class="hud-label bl">CPU: 100%<br>AI.LOAD: 98.7%<br>NEURAL.SYNC: OK</div>
+        <div class="hud-label br">NET: SECURE<br>ENCRYPTION: ON<br>SANDBOX: READY</div>
+        <div id="intro-title">
+            <div class="nova-wordmark">NOVA</div>
+            <div class="nova-sub">AI Operating System · Teched Studios</div>
+        </div>
+        <div id="boot-status"><span>INITIALIZING NOVA AI CORE SYSTEM...</span></div>
+        <div id="boot-progress-wrap">
+            <div id="boot-progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- MAIN SITE -->
+    <div id="main-site">
+        <div id="three-canvas-container"></div>
+        <div class="page-container">
+
+            <header>
+                <div class="logo">NOVA <span>AI OS</span></div>
+                <nav>
+                    <ul>
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#ecosystem">Nova Lite</a></li>
+                        <li><a href="#ecosystem">Nova Pro</a></li>
+                        <li><a href="#ecosystem">Nova Coder</a></li>
+                        <li><a href="#api">API Docs</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#about">Teched Studios</a></li>
+                    </ul>
+                </nav>
+            </header>
+
+            <section id="hero">
+                <div class="hero-badge"><span class="badge-dot"></span>Coming Soon — Nova 2026 Early Access</div>
+                <h1>Nova — The AI<br>Operating System</h1>
+                <p>An intelligent AI OS combining model power and interface intelligence. Think, code, create and
+                    automate — all under one unified AI layer.</p>
+                <div class="cta-container">
+                    <a href="#ecosystem" class="cta-btn primary">⚡ Launch Nova Lite</a>
+                    <a href="#ecosystem" class="cta-btn secondary">🧠 Explore Nova Pro</a>
+                    <a href="#api" class="cta-btn outline">&lt;/&gt; Developer API</a>
+                </div>
+            </section>
+
+            <section id="ecosystem">
+                <h2 class="reveal">Product <span>Ecosystem</span></h2>
+                <div class="ecosystem-grid">
+                    <div class="ecosystem-card card-lite reveal" data-product="lite">
+                        <div class="card-badge">⚡ FREE TIER</div>
+                        <span class="card-icon">🌩️</span>
+                        <h3>Nova Lite</h3>
+                        <p>Lightweight AI assistant built for speed. Handles chat, research, Q&amp;A and productivity
+                            tasks with remarkable efficiency. The fastest way to interact with Nova intelligence.</p>
+                        <a href="#" class="card-link" onclick="openProductDetail('lite'); return false;">Learn More
+                            →</a>
+                    </div>
+                    <div class="ecosystem-card card-pro reveal" data-product="pro">
+                        <div class="card-badge">🧠 PRO</div>
+                        <span class="card-icon">∞</span>
+                        <h3>Nova Pro</h3>
+                        <p>Advanced reasoning engine with deep analytical power. Autonomous AI workflows, multi-tool
+                            intelligence, and memory-persistent conversations for complex tasks.</p>
+                        <a href="#" class="card-link" onclick="openProductDetail('pro'); return false;">Learn More →</a>
+                    </div>
+                    <div class="ecosystem-card card-coder reveal" data-product="coder">
+                        <div class="card-badge">💻 DEV</div>
+                        <span class="card-icon">&lt;/&gt;</span>
+                        <h3>Nova Coder</h3>
+                        <p>AI developer intelligence that generates full applications and AAA title games, resolves
+                            complex software
+                            architecture, and writes production-grade code across any tech stack.</p>
+                        <a href="#" class="card-link" onclick="openProductDetail('coder'); return false;">Learn More
+                            →</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="features">
+                <h2 class="reveal">Core <span style="color:var(--hud-cyan)">Capabilities</span></h2>
+                <div class="features-grid">
+                    <div class="feature-tile reveal">
+                        <div class="feature-icon-wrap">💬</div>
+                        <h4>AI Chat Engine</h4>
+                        <p>Multi-turn conversations powered by Nova's reasoning core. Context-aware and
+                            memory-persistent.</p>
+                    </div>
+                    <div class="feature-tile reveal">
+                        <div class="feature-icon-wrap">&gt;_</div>
+                        <h4>Code Generation</h4>
+                        <p>Generate full-stack applications, scripts, APIs and complex software with natural language
+                            prompts.</p>
+                    </div>
+                    <div class="feature-tile reveal">
+                        <div class="feature-icon-wrap">🔍</div>
+                        <h4>Research Intelligence</h4>
+                        <p>Deep web research, source synthesis and fact-checking built directly into the Nova interface.
+                        </p>
+                    </div>
+                    <div class="feature-tile reveal">
+                        <div class="feature-icon-wrap">🎨</div>
+                        <h4>Media &amp; Image AI</h4>
+                        <p>Generate, edit and manipulate images and media assets using Nova's integrated creative
+                            engine.</p>
+                    </div>
+                    <div class="feature-tile reveal">
+                        <div class="feature-icon-wrap">🧠</div>
+                        <h4>Persistent Memory</h4>
+                        <p>Nova remembers your preferences, projects and past conversations to give fully personalized
+                            responses.</p>
+                    </div>
+                    <div class="feature-tile reveal">
+                        <div class="feature-icon-wrap">⚙️</div>
+                        <h4>Workflow Automation</h4>
+                        <p>Build autonomous AI pipelines that execute multi-step tasks across tools, APIs and data
+                            sources.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="api">
+                <h2 class="reveal">Developer <span style="color:var(--hud-cyan)">API</span></h2>
+                <p class="reveal">Integrate Nova's intelligence directly into your applications. Simple REST API with
+                    SDKs for Python, JavaScript, and more.</p>
+                <div class="api-code-block reveal">
+                    <div class="api-dots">
+                        <div class="api-dot"></div>
+                        <div class="api-dot"></div>
+                        <div class="api-dot"></div>
+                    </div>
+                    <span class="code-comment">// Nova API — Quick Start</span>
+                    <span class="code-keyword">import</span> { <span class="code-var">NovaClient</span> } <span
+                        class="code-keyword">from</span> <span class="code-string">'@teched/nova-sdk'</span>;
+
+                    <span class="code-keyword">const</span> <span class="code-var">nova</span> = <span
+                        class="code-keyword">new</span> <span class="code-fn">NovaClient</span>({
+                    apiKey: <span class="code-string">'your-api-key'</span>,
+                    model: <span class="code-string">'nova-pro-2026'</span>
+                    });
+
+                    <span class="code-keyword">const</span> <span class="code-var">response</span> = <span
+                        class="code-keyword">await</span> nova.<span class="code-fn">chat</span>({
+                    messages: [{ role: <span class="code-string">'user'</span>, content: <span
+                        class="code-string">'Hello, Nova!'</span> }]
+                    });
+
+                    console.<span class="code-fn">log</span>(<span class="code-var">response</span>.message); <span
+                        class="code-comment">// "Hello! I'm Nova..."</span>
+                </div>
+                <div class="cta-container" style="margin-top:2.5rem">
+                    <a href="#" class="cta-btn primary">View API Documentation</a>
+                    <a href="#" class="cta-btn secondary">Get API Key</a>
+                </div>
+            </section>
+
+            <section id="about">
+                <h2 class="reveal">About <span>Teched Studios</span></h2>
+                <p class="reveal">Nova AI OS is built by Teched Studios — an independent innovation studio focused on
+                    creating next-generation AI systems, OS-level intelligence, and developer platforms that push the
+                    boundaries of what AI can do.</p>
+                <div class="stat-row">
+                    <div class="stat-item reveal">
+                        <div class="stat-number">99.9%</div>
+                        <div class="stat-label">Uptime SLA</div>
+                    </div>
+                    <div class="stat-item reveal">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">AI Models</div>
+                    </div>
+                    <div class="stat-item reveal">
+                        <div class="stat-number">2026</div>
+                        <div class="stat-label">Founded</div>
+                    </div>
+                </div>
+                <a href="mailto:techedstudios.contact@gmail.com"
+                    class="email-link reveal">techedstudios.contact@gmail.com</a>
+            </section>
+
+            <footer>
+                <p>© 2026 <span>Teched Studios</span>. All rights reserved. | <span>Nova AI OS</span> | Terms of Service
+                    | Privacy Policy</p>
+            </footer>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        /* ================================================================
+           INTRO ANIMATION — JARVIS / IRON MAN HUD STYLE
+           Thick flat arcs, cyan glows, layered rings, red iron man mascot
+        ================================================================ */
+        (function () {
+            'use strict';
+
+            const container = document.getElementById('intro-canvas-container');
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x000000, 0); // Transparent so CSS gradient passes through
+            container.appendChild(renderer.domElement);
+
+            const clock = new THREE.Clock();
+
+            /* ── MASTER GROUP ── */
+            const G = new THREE.Group();
+            scene.add(G);
+
+            // EXACT COLORS from video
+            const GLOW_WHITE = 0xffffff;
+            const GLOW_CYAN = 0xaaffff; // Bright neon ice blue
+            const DARK_CYAN = 0x3388aa; // Muted blue
+            const GREY_DARK = 0x445566;
+            const GREY_LITE = 0x88aabb;
+            const RED = 0xff2244;
+
+            const spinners = []; // { mesh, speed }
+            function spinNode(mesh, speed) { spinners.push({ mesh, speed }); return mesh; }
+
+            /* Helper: Flat thick ring arc */
+            function flatArc(rInner, thickness, startA, lenA, col, op, isDouble) {
+                const geo = new THREE.RingGeometry(rInner, rInner + thickness, Math.max(16, Math.floor(lenA * 20)), 1, startA, lenA);
+                const mat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: op, side: isDouble ? THREE.DoubleSide : THREE.FrontSide });
+                return new THREE.Mesh(geo, mat);
+            }
+
+            /* Helper: Thin dashed track line */
+            function trackLine(r, dashCount, col, op) {
+                const grp = new THREE.Group();
+                const step = (Math.PI * 2) / dashCount;
+                for (let i = 0; i < dashCount; i++) {
+                    const start = i * step;
+                    const pts = [];
+                    for (let j = 0; j <= 10; j++) {
+                        const a = start + (j / 10) * (step * 0.7);
+                        pts.push(new THREE.Vector3(Math.cos(a) * r, Math.sin(a) * r, 0));
+                    }
+                    grp.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op })));
+                }
+                return grp;
+            }
+
+            /* ── CORE CENTER GLOW ── */
+            const coreGrp = new THREE.Group();
+
+            // Center glow spot
+            coreGrp.add(new THREE.Mesh(new THREE.CircleGeometry(0.08, 32), new THREE.MeshBasicMaterial({ color: GLOW_WHITE, transparent: true, opacity: 0.9 })));
+
+            G.add(spinNode(coreGrp, 0.2));
+
+            /* ── RING LAYER 1: INNER THICK ARCS (Z = 0.1) ── */
+            const l1 = new THREE.Group(); l1.position.z = 0.1;
+            l1.add(flatArc(0.65, 0.08, 0, Math.PI * 1.5, GLOW_WHITE, 0.9, true)); // 3/4 white ring
+            l1.add(flatArc(0.65, 0.08, Math.PI * 1.6, Math.PI * 0.3, GLOW_CYAN, 0.8, true)); // small cyan gap
+            G.add(spinNode(l1, 1.8));
+
+            /* ── RING LAYER 2: DARK TRACK & TRIANGLES (Z = -0.1) ── */
+            const l2 = new THREE.Group(); l2.position.z = -0.1;
+            l2.add(flatArc(0.85, 0.25, 0, Math.PI * 2, GREY_DARK, 0.3, true)); // Grey backing band
+            l2.add(trackLine(1.1, 40, DARK_CYAN, 0.6));
+
+            // Orbiting HUD triangle indicators
+            const tri1 = new THREE.Mesh(new THREE.CircleGeometry(0.06, 3), new THREE.MeshBasicMaterial({ color: GLOW_CYAN, transparent: true, opacity: 0.9, side: THREE.DoubleSide }));
+            tri1.position.x = 0.95; tri1.rotation.z = Math.PI / 2;
+            l2.add(tri1);
+            const tri2 = tri1.clone(); tri2.position.set(-0.95, 0, 0); tri2.rotation.z = -Math.PI / 2;
+            l2.add(tri2);
+            G.add(spinNode(l2, -1.2));
+
+            /* ── RING LAYER 3: MULTIPLE GLOWING ARCS (Z = 0.2) ── */
+            const l3 = new THREE.Group(); l3.position.z = 0.2;
+            // segmented bright white tracks
+            l3.add(flatArc(1.2, 0.05, 0, 1.0, GLOW_WHITE, 0.95, true));
+            l3.add(flatArc(1.2, 0.05, 1.5, 2.5, GLOW_WHITE, 0.9, true));
+            l3.add(flatArc(1.2, 0.05, 4.5, 1.2, GLOW_CYAN, 0.85, true));
+            // thicker grey outline
+            l3.add(flatArc(1.28, 0.02, 0, Math.PI * 2, GREY_LITE, 0.4, true));
+            G.add(spinNode(l3, 1.0));
+
+            /* ── RING LAYER 4: OUTER DARK BANDS & DASHES (Z = -0.2) ── */
+            const l4 = new THREE.Group(); l4.position.z = -0.2;
+            l4.add(flatArc(1.5, 0.3, 0, Math.PI * 2, GREY_DARK, 0.2, true)); // Very thick dark halo
+            l4.add(flatArc(1.52, 0.06, Math.PI, Math.PI * 0.8, GLOW_CYAN, 0.7, true)); // cyan rim
+            l4.add(trackLine(1.85, 60, GREY_LITE, 0.5));
+            G.add(spinNode(l4, -0.6));
+
+            /* ── RING LAYER 5: OUTERMOST ACCENTS (Z = 0) ── */
+            const l5 = new THREE.Group();
+            // tiny outer tick marks
+            const ticks = new THREE.Group();
+            for (let i = 0; i < 80; i++) {
+                const a = (i / 80) * Math.PI * 2;
+                const pts = [new THREE.Vector3(Math.cos(a) * 2.05, Math.sin(a) * 2.05, 0), new THREE.Vector3(Math.cos(a) * 2.12, Math.sin(a) * 2.12, 0)];
+                ticks.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: GLOW_CYAN, transparent: true, opacity: i % 10 === 0 ? 0.8 : 0.2 })));
+            }
+            l5.add(ticks);
+            G.add(spinNode(l5, 0.4));
+
+            // Outer ticks removed / adjusted for no globe line
+
+            /* ── CAMERA start ── */
+            camera.position.set(0, 0, 8.5);
+            camera.lookAt(0, 0, 0);
+
+            /* ── ANIMATION ── */
+            const FACE_END = 2.5, TILT_END = 5.2;
+            let running = true;
+
+            function easeIO(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+
+            function loop() {
+                if (!running) return;
+                requestAnimationFrame(loop);
+
+                const t = clock.getElapsedTime();
+
+                // Spin layered rings
+                spinners.forEach(s => { s.mesh.rotation.z += s.speed * 0.005; });
+
+                // Core pulse and opacity
+                const pulse = 0.95 + Math.sin(t * 6) * 0.05;
+                coreGrp.scale.setScalar(pulse);
+
+                // Tilt animation
+                if (t < FACE_END) {
+                    G.rotation.x = 0; G.rotation.y = 0;
+                    camera.position.set(0, 0, 8.5);
+                    camera.lookAt(0, 0, 0);
+                } else if (t < TILT_END) {
+                    const p = (t - FACE_END) / (TILT_END - FACE_END);
+                    const e = easeIO(p);
+
+                    // dramatic tilt to flat sauce disc (~70°)
+                    G.rotation.x = e * 1.25;
+                    G.rotation.y = e * 0.28;
+
+                    // The layered Z-offsets naturally create the "layer cake disc" 3D feel when tilted!
+                    camera.position.set(0, e * 1.5, 8.5 - e * 1.5);
+                    camera.lookAt(0, -e * 0.5, 0);
+                } else {
+                    const sway = Math.sin((t - TILT_END) * 1.0) * 0.03;
+                    G.rotation.x = 1.25 + sway;
+                    G.rotation.y = 0.28 + sway * 0.5;
+                }
+
+                renderer.render(scene, camera);
+            }
+            loop();
+
+            // Progress bar
+            const bar = document.getElementById('boot-progress-bar');
+            let prog = 0;
+            const iv = setInterval(() => {
+                prog = Math.min(100, prog + (prog < 70 ? 1.4 : prog < 92 ? 0.5 : 0.12));
+                bar.style.width = prog + '%';
+                if (prog >= 100) clearInterval(iv);
+            }, 60);
+
+            // Start transition at 6s
+            setTimeout(() => { running = false; transitionToMain(); }, 6000);
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        })();
+
+        /* ================================================================
+           TRANSITION
+        ================================================================ */
+        function transitionToMain() {
+            const flash = document.getElementById('flash-overlay');
+            const intro = document.getElementById('intro-screen');
+            const main = document.getElementById('main-site');
+
+            flash.style.pointerEvents = 'all';
+            flash.style.transition = 'opacity 0.25s ease';
+            flash.style.opacity = '1';
+
+            setTimeout(() => {
+                intro.style.transition = 'opacity 0.3s ease';
+                intro.style.opacity = '0';
+                main.classList.add('visible');
+                document.body.style.overflow = '';
+                document.documentElement.style.overflow = '';
+
+                flash.style.transition = 'opacity 0.65s ease';
+                flash.style.opacity = '0';
+
+                setTimeout(() => {
+                    intro.style.display = 'none';
+                    flash.style.pointerEvents = 'none';
+                    initMainThree();
+                    initReveal();
+                }, 750);
+            }, 320);
+        }
+
+        /* ================================================================
+           MAIN SITE: Three.js background sphere
+        ================================================================ */
+        function initMainThree() {
+            const container = document.getElementById('three-canvas-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 6;
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const sphereGeo = new THREE.IcosahedronGeometry(2, 10);
+            const sphereMat = new THREE.PointsMaterial({ color: 0x00ffff, size: 0.01, transparent: true, opacity: 0.7, sizeAttenuation: true });
+            const sphere = new THREE.Points(sphereGeo, sphereMat);
+            scene.add(sphere);
+
+            const outerGeo = new THREE.IcosahedronGeometry(2.4, 5);
+            const outerMat = new THREE.PointsMaterial({ color: 0x8e44ad, size: 0.007, transparent: true, opacity: 0.25 });
+            scene.add(new THREE.Points(outerGeo, outerMat));
+
+            const pPos = new Float32Array(1500 * 3);
+            for (let i = 0; i < 1500 * 3; i++) pPos[i] = (Math.random() - 0.5) * 25;
+            const pGeo = new THREE.BufferGeometry();
+            pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+            const pMesh = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.005, color: 0x00ddff, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending }));
+            scene.add(pMesh);
+
+            const clock = new THREE.Clock();
+            let mx = 0, my = 0;
+            document.addEventListener('mousemove', e => { mx = (e.clientX / window.innerWidth - 0.5) * 2; my = (e.clientY / window.innerHeight - 0.5) * 2; });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const t = clock.getElapsedTime();
+                sphere.rotation.y = t * 0.12;
+                sphere.rotation.x = Math.sin(t * 0.08) * 0.08;
+                pMesh.rotation.y = -t * 0.015;
+                camera.position.x += (mx * 0.5 - camera.position.x) * 0.04;
+                camera.position.y += (-my * 0.3 - camera.position.y) * 0.04;
+                camera.lookAt(scene.position);
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        /* ================================================================
+           SCROLL REVEAL
+        ================================================================ */
+        const _productData = {
+            'lite': {
+                icon: '🌩️', tier: '⚡ FREE TIER', title: 'Nova Lite',
+                desc: 'Nova Lite is the fastest AI assistant ever built by Teched Studios. It connects to the internet in real-time and delivers instant, accurate answers with a lightweight footprint perfect for daily productivity tasks.',
+                steps: [
+                    { icon: '🔍', title: 'Real-time Web Research', desc: 'Nova Lite fetches live information from the web and synthesises it into clean answers — no hallucinations, just facts.', pct: 92 },
+                    { icon: '⚡', title: 'Instant Response Speed', desc: 'Sub-second response latency. Nova Lite is designed so you never have to wait for an answer.', pct: 98 },
+                    { icon: '📝', title: 'Document Summarization', desc: 'Drop any document or link and Nova Lite distils the key insights for you in seconds.', pct: 87 },
+                    { icon: '🧠', title: 'Conversational Memory', desc: 'Remembers the context of your conversation across sessions — no need to repeat yourself.', pct: 80 },
+                ],
+                terminal: [
+                    '[NOVA LITE] Booting AI core...          OK',
+                    '[NOVA LITE] Connecting to web stream..  LIVE',
+                    '[NOVA LITE] Loading language model...   DONE',
+                    '[NOVA LITE] Ready. Waiting for query...',
+                    '> User: "Summarise today\'s top AI news"',
+                    '[NOVA LITE] Searching 140 live sources...',
+                    '[NOVA LITE] Result ready in 0.4s ✅',
+                ],
+                cta: 'Launch Nova Lite'
+            },
+            'pro': {
+                icon: '∞', tier: '🧠 PRO', title: 'Nova Pro',
+                desc: 'Nova Pro is the flagship reasoning engine for power users. It autonomously decomposes complex goals into multi-step plans, runs them using real tools, and reports back — all without you lifting a finger.',
+                steps: [
+                    { icon: '🤖', title: 'Autonomous AI Agents', desc: 'Nova Pro creates and runs AI agents that execute tasks inside your apps, APIs, and data automatically.', pct: 95 },
+                    { icon: '🔬', title: 'Deep Logic Reasoning', desc: 'Multi-hop reasoning over large contexts let Nova Pro solve problems other AIs simply cannot handle.', pct: 90 },
+                    { icon: '🔧', title: 'Multi-tool Orchestration', desc: 'Calls search, code execution, calculators, and third-party APIs together to solve complex compound tasks.', pct: 85 },
+                    { icon: '📊', title: 'Custom AI Pipelines', desc: 'Build no-code automation pipelines and let Nova Pro run them 24/7 in the background for you.', pct: 88 },
+                ],
+                terminal: [
+                    '[NOVA PRO] Initialising reasoning engine..  OK',
+                    '[NOVA PRO] Loading long-context memory...   DONE',
+                    '[NOVA PRO] Tool registry connected (12 tools)',
+                    '[NOVA PRO] Agent scheduler ACTIVE',
+                    '> User: "Research competitors and build a report"',
+                    '[NOVA PRO] Spawning sub-agents... [1/3] [2/3] [3/3]',
+                    '[NOVA PRO] Synthesising 47 sources... Report ready ✅',
+                ],
+                cta: 'Upgrade to Nova Pro'
+            },
+            'coder': {
+                icon: '💻', tier: '💻 DEV', title: 'Nova Coder',
+                desc: 'Nova Coder is the world\'s most powerful AI developer. From React apps to AAA video games using Unreal Engine, Nova Coder writes, debugs, deploys, and ships production-grade code across every platform and stack.',
+                steps: [
+                    { icon: '🎮', title: 'AAA Game Development', desc: 'Full game generation using Unreal & Unity. Nova Coder creates entire game worlds, mechanics, and assets from a single prompt.', pct: 89 },
+                    { icon: '🚀', title: 'Full-stack App Deployment', desc: 'From idea to deployed web app in minutes. Nova Coder writes and ships code automatically to your hosting provider.', pct: 96 },
+                    { icon: '🕵️', title: 'Automated Bug Detection', desc: 'Nova Coder scans your codebase, identifies vulnerabilities, and generates fixes — proactively, before you ship.', pct: 91 },
+                    { icon: '🌐', title: 'Any Stack, Anywhere', desc: 'Python, TypeScript, Rust, Go, C++, Solidity — Nova Coder is fluent in every major framework and platform.', pct: 99 },
+                ],
+                terminal: [
+                    '[NOVA CODER] Dev environment initialised..   OK',
+                    '[NOVA CODER] Stack detected: Next.js + Unreal',
+                    '> User: "Build me a 3D open-world RPG"',
+                    '[NOVA CODER] Generating world assets... (12,440 files)',
+                    '[NOVA CODER] Compiling game engine hooks..   DONE',
+                    '[NOVA CODER] Running automated QA checks...  PASS',
+                    '[NOVA CODER] Build complete. Deploying... ✅  LIVE',
+                ],
+                cta: 'Open Nova Coder'
+            }
+        };
+
+        let _demoTimers = [];
+        function _clearDemo() { _demoTimers.forEach(t => clearTimeout(t)); _demoTimers = []; }
+        function _t(fn, ms) { _demoTimers.push(setTimeout(fn, ms)); }
+
+        function openProductDetail(key) {
+            const data = _productData[key];
+            if (!data) return;
+            _clearDemo();
+
+            // Populate header
+            document.getElementById('demo-icon').innerHTML = data.icon;
+            document.getElementById('demo-tier').innerText = data.tier;
+            document.getElementById('demo-title').innerText = data.title;
+            document.getElementById('demo-cta').innerText = data.cta;
+
+            // Clear dynamic areas
+            const descEl = document.getElementById('demo-desc');
+            const progressEl = document.getElementById('demo-progress');
+            const pctEl = document.getElementById('demo-pct');
+            const stepsEl = document.getElementById('demo-steps');
+            const termEl = document.getElementById('demo-terminal');
+            const ctaBtn = document.getElementById('demo-cta');
+            descEl.innerHTML = '';
+            progressEl.style.width = '0%';
+            pctEl.innerText = '0%';
+            stepsEl.innerHTML = '';
+            termEl.innerHTML = '';
+            ctaBtn.classList.remove('revealed');
+
+            // Show overlay
+            document.getElementById('details-overlay').classList.add('active');
+
+            // 1. Typewriter description (starts at 350ms)
+            const fullDesc = data.desc;
+            let di = 0;
+            _t(() => {
+                const cursor = document.createElement('span');
+                cursor.className = 'demo-cursor';
+                descEl.appendChild(cursor);
+                const typeInterval = setInterval(() => {
+                    if (di < fullDesc.length) {
+                        cursor.before(document.createTextNode(fullDesc[di++]));
+                    } else {
+                        clearInterval(typeInterval);
+                        cursor.remove();
+                    }
+                }, 18);
+            }, 350);
+
+            // 2. Progress bar (starts at 400ms, runs for ~3s)
+            _t(() => {
+                let pct = 0;
+                const iv = setInterval(() => {
+                    pct = Math.min(100, pct + (pct < 70 ? 1.5 : pct < 92 ? 0.6 : 0.2));
+                    progressEl.style.width = pct + '%';
+                    pctEl.innerText = Math.round(pct) + '%';
+                    if (pct >= 100) clearInterval(iv);
+                }, 40);
+            }, 400);
+
+            // 3. Inject step cards (start at 1.8s, stagger 350ms each)
+            data.steps.forEach((s, i) => {
+                const card = document.createElement('div');
+                card.className = 'demo-step';
+                card.innerHTML = `
+                    <div class="step-num">${String(i + 1).padStart(2, '0')}</div>
+                    <div class="step-body">
+                        <div class="step-title"><span class="step-icon">${s.icon}</span>${s.title}</div>
+                        <div class="step-desc">${s.desc}</div>
+                        <div class="step-progress"><div class="step-progress-fill" id="sp-${i}"></div></div>
+                    </div>`;
+                stepsEl.appendChild(card);
+
+                _t(() => {
+                    card.classList.add('revealed');
+                    _t(() => { document.getElementById('sp-' + i).style.width = s.pct + '%'; }, 200);
+                }, 1800 + i * 370);
+            });
+
+            // 4. Terminal lines (start after steps)
+            const termStart = 1800 + data.steps.length * 370 + 300;
+            data.terminal.forEach((line, i) => {
+                _t(() => {
+                    const cls = line.startsWith('>') ? 't-prompt' : line.includes('✅') ? 't-ok' : 't-dim';
+                    const el = document.createElement('div');
+                    el.className = `terminal-line ${cls}`;
+                    el.innerText = line;
+                    termEl.appendChild(el);
+                    requestAnimationFrame(() => el.classList.add('visible'));
+                    termEl.scrollTop = termEl.scrollHeight;
+                }, termStart + i * 420);
+            });
+
+            // 5. CTA button reveal
+            _t(() => ctaBtn.classList.add('revealed'), termStart + data.terminal.length * 420 + 400);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('details-overlay');
+            document.getElementById('close-details-btn').addEventListener('click', () => {
+                overlay.classList.remove('active');
+                _clearDemo();
+            });
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) { overlay.classList.remove('active'); _clearDemo(); }
+            });
+        });
+
+        function initReveal() {
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+            }, { threshold: 0.12 });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        }
+
+    </script>
+</body>
+
+</html>
